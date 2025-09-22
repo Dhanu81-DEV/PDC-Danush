@@ -1,3 +1,5 @@
+from io import BytesIO
+
 from flask import Flask, redirect, url_for, session, render_template, request
 from authlib.integrations.flask_client import OAuth
 from datetime import datetime
@@ -71,16 +73,20 @@ def generate_thumbnail():
 
         response = client.models.generate_content(
             model="gemini-2.5-flash-image-preview",
-            contents=[prompt_text] + pil_images
+            contents=[prompt_text, pil_images]
         )
 
-        generated_part = response.candidates[0].content.parts[0]
-        if generated_part.inline_data is not None:
-            thumbnail_bytes = generated_part.inline_data.data
-            thumbnail_path = "static/images/generated_thumbnail.png"
-            os.makedirs(os.path.dirname(thumbnail_path), exist_ok=True)
-            with open(thumbnail_path, "wb") as f:
-                f.write(thumbnail_bytes)
+        for part in response.candidates[0].content.parts:
+            if hasattr(part, "text") and part.text is not None:
+                print(part.text)
+
+            elif hasattr(part, "inline_data") and part.inline_data is not None:
+                image_bytes = part.inline_data.data
+                image = Image.open(BytesIO(image_bytes))
+                thumbnail_path = "static/images/generated_thumbnail.png"
+                os.makedirs(os.path.dirname(thumbnail_path), exist_ok=True)
+                image.save(thumbnail_path)
+                break
         else:
             return "No image returned by Gemini.", 500
 
