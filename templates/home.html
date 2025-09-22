@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Welcome</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; margin-top: 80px; }
+        .profile { margin-bottom: 20px; }
+        .profile img {
+            border-radius: 50%;
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
+            box-shadow: 0px 4px 8px rgba(0,0,0,0.2);
+        }
+        a { color: #1473C9; text-decoration: none; margin-left: 8px; }
+        a:hover { text-decoration: underline; }
+        .time { margin-top: 20px; font-weight: bold; color: #333; }
+    </style>
+</head>
+<body>
+    <div class="profile">
+        <img src="{{ user['picture'] }}" alt="Profile Picture">
+    </div>
+    <h2>
+        Hello {{ user['name'] }}
+        <a href="{{ url_for('logout') }}">[Sign out]</a>
+    </h2>
+    <p>You are signed in with the email <b>{{ user['email'] }}</b></p>
+    <p class="time">Current Indian Time: {{ current_time }}</p>
+</body>
+</html>
