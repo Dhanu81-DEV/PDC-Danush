@@ -27,7 +27,6 @@ client_kwargs={"scope": "email profile"},
 def index():
     user = session.get("user")
     if user:
-        # Current Indian Standard Time
         ist = pytz.timezone("Asia/Kolkata")
         current_time = datetime.now(ist).strftime("%Y-%m-%d %H:%M:%S")
         return render_template("home.html", user=user, current_time=current_time)
