@@ -106,5 +106,46 @@ def logout():
     return redirect("/")
 
 
+@app.route("/generate_pattern", methods=["POST"])
+def generate_pattern():
+    user = session.get("user")
+    if not user:
+        return "Unauthorized", 401
+
+    try:
+        n = int(request.form.get("lines", 0))
+        stock_number = n
+        if n <= 0:
+            return "Enter a positive number!", 400
+
+        word = "FORMULAQSOLUTIONS"
+
+        if n % 2 == 0:
+            n += 1
+        l = len(word)
+        mid = n // 2
+        widths = list(range(1, mid + 2)) + list(range(mid, 0, -1))
+        widths = [w * 2 - 1 for w in widths]
+        max_w = max(widths)
+
+        pattern_lines = []
+        for i, w in enumerate(widths):
+            start = i % l
+            s = (word[start:] + word * 2)[:w]
+            pattern_lines.append(s.center(max_w))
+
+        pattern_text = "\n".join(pattern_lines)
+
+        return render_template(
+            "home.html",
+            user=user,
+            diamond_pattern=pattern_text,
+            pattern_input = stock_number
+        )
+
+    except Exception as e:
+        return f"Error generating pattern: {e}", 500
+
+
 if __name__ == "__main__":
     app.run(debug=True)

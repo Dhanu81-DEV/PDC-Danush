@@ -1,0 +1,6 @@
+pytz
+Flask
+Authlib
+python-dotenv
+pillow
+protobuf

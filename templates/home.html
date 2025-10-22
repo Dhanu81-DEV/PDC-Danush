@@ -96,6 +96,20 @@
     {% endif %}
 </div>
 
+    <h3>Diamond Pattern Generator</h3>
+<form action="{{ url_for('generate_pattern') }}" method="POST">
+    <input type="number" name="lines" placeholder="Enter number of lines" required>
+    <button type="submit">Generate Pattern</button>
+</form>
+
+<div id="diamond-container">
+    {% if diamond_pattern %}
+    <h4>Generated Diamond Pattern for : {{ pattern_input }}</h4>
+    <pre style="font-family: monospace; font-size: 16px;">{{ diamond_pattern }}</pre>
+    {% endif %}
+</div>
+
+
 <script>
 document.getElementById("thumbnail-form").addEventListener("submit", async function(e) {
     e.preventDefault();
